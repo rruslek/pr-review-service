@@ -3,7 +3,6 @@ package service
 import (
 	"math/rand"
 	"pr-review-service/internal/database"
-	"time"
 )
 
 type Service struct {
@@ -23,7 +22,6 @@ func selectRandomReviewers(candidates []string, n int) []string {
 		return candidates
 	}
 
-	rand.Seed(time.Now().UnixNano())
 	shuffled := make([]string, len(candidates))
 	copy(shuffled, candidates)
 	rand.Shuffle(len(shuffled), func(i, j int) {

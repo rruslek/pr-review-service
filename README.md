@@ -40,9 +40,11 @@ docker-compose up
 
 - `POST /team/add` - Создать команду с участниками
 - `GET /team/get?team_name=<name>` - Получить команду с участниками
+- `POST /team/bulkDeactivate` - Массовая деактивация пользователей команды с безопасным переназначением ревьюверов в открытых PR
 - `POST /users/setIsActive` - Установить флаг активности пользователя
 - `GET /users/getReview?user_id=<id>` - Получить PR'ы, где пользователь назначен ревьювером
 - `POST /pullRequest/create` - Создать PR и автоматически назначить до 2 ревьюверов
 - `POST /pullRequest/merge` - Пометить PR как MERGED (идемпотентная операция)
 - `POST /pullRequest/reassign` - Переназначить конкретного ревьювера
+- `GET /stats` - Получить статистику (количество назначений по пользователям и PR)
 - `GET /health` - Health check endpoint

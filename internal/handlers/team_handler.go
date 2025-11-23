@@ -48,3 +48,30 @@ func (h *Handlers) GetTeam(w http.ResponseWriter, r *http.Request) {
 
 	h.writeJSON(w, http.StatusOK, team)
 }
+
+// POST /team/bulkDeactivate
+func (h *Handlers) BulkDeactivateTeam(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	var req models.BulkDeactivateRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		h.writeError(w, http.StatusBadRequest, "INVALID_REQUEST", "Invalid request body")
+		return
+	}
+
+	if req.TeamName == "" {
+		h.writeError(w, http.StatusBadRequest, "INVALID_REQUEST", "team_name is required")
+		return
+	}
+
+	result, err := h.service.BulkDeactivateTeamUsers(req.TeamName)
+	if err != nil {
+		h.handleServiceError(w, err)
+		return
+	}
+
+	h.writeJSON(w, http.StatusOK, result)
+}

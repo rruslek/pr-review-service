@@ -153,6 +153,17 @@
                 <button onclick="getTeam()">Получить команду</button>
                 <div id="getTeamResponse" class="response" style="display:none;"></div>
             </div>
+
+            <div class="card">
+                <h2>Массовая деактивация команды</h2>
+                <p>Деактивирует всех пользователей команды и переназначает ревьюверов в открытых PR</p>
+                <div class="form-group">
+                    <label>Team Name:</label>
+                    <input type="text" id="bulkDeactivateTeamName" placeholder="backend">
+                </div>
+                <button onclick="bulkDeactivateTeam()">Деактивировать команду</button>
+                <div id="bulkDeactivateResponse" class="response" style="display:none;"></div>
+            </div>
             
             <div class="card">
                 <h2>Установить активность пользователя</h2>
@@ -220,6 +231,13 @@
                 </div>
                 <button onclick="getUserReviews()">Получить PR</button>
                 <div id="getReviewResponse" class="response" style="display:none;"></div>
+            </div>
+
+            <div class="card">
+                <h2>Статистика</h2>
+                <p>Количество назначений по пользователям и PR</p>
+                <button onclick="getStats()">Получить статистику</button>
+                <div id="statsResponse" class="response" style="display:none;"></div>
             </div>
         </div>
     </div>
@@ -332,6 +350,29 @@
                 showResponse('getReviewResponse', data, !response.ok);
             } catch (error) {
                 showResponse('getReviewResponse', { error: error.message }, true);
+            }
+        }
+        async function getStats() {
+            try {
+                const response = await fetch('/stats');
+                const data = await response.json();
+                showResponse('statsResponse', data, !response.ok);
+            } catch (error) {
+                showResponse('statsResponse', { error: error.message }, true);
+            }
+        }
+        async function bulkDeactivateTeam() {
+            try {
+                const teamName = document.getElementById('bulkDeactivateTeamName').value;
+                const response = await fetch('/team/bulkDeactivate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ team_name: teamName })
+                });
+                const data = await response.json();
+                showResponse('bulkDeactivateResponse', data, !response.ok);
+            } catch (error) {
+                showResponse('bulkDeactivateResponse', { error: error.message }, true);
             }
         }
     </script>

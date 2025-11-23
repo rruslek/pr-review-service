@@ -15,10 +15,12 @@ func (h *Handlers) SetupRoutes(mux *http.ServeMux) {
 
 	mux.HandleFunc("/team/add", h.AddTeam)
 	mux.HandleFunc("/team/get", h.GetTeam)
+	mux.HandleFunc("/team/bulkDeactivate", h.BulkDeactivateTeam)
 	mux.HandleFunc("/users/setIsActive", h.SetUserActive)
 	mux.HandleFunc("/users/getReview", h.GetUserReview)
 	mux.HandleFunc("/pullRequest/create", h.CreatePullRequest)
 	mux.HandleFunc("/pullRequest/merge", h.MergePullRequest)
 	mux.HandleFunc("/pullRequest/reassign", h.ReassignReviewer)
+	mux.HandleFunc("/stats", h.GetStats)
 	mux.HandleFunc("/health", h.HealthCheck)
 }
