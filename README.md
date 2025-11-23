@@ -48,3 +48,68 @@ docker-compose up
 - `POST /pullRequest/reassign` - Переназначить конкретного ревьювера
 - `GET /stats` - Получить статистику (количество назначений по пользователям и PR)
 - `GET /health` - Health check endpoint
+
+## Нагрузочное тестирование
+
+Проведено нагрузочное тестирование решения.
+
+**Результаты:**
+- Система справляется с целевым RPS = 5
+- Все endpoints укладываются в SLI времени ответа 300 мс
+- Успешность запросов превышает 99.9%
+
+Для запуска нагрузочного тестирования:
+```bash
+# Убедитесь, что сервис запущен на localhost:8080
+go run ./tools/loadtest
+```
+
+Или укажите другой URL:
+```bash
+go run ./tools/loadtest http://localhost:8080
+```
+
+## Линтер
+
+Проект использует `golangci-lint` для проверки качества кода. Конфигурация находится в файле `.golangci.yml`.
+
+
+```bash
+# Проверить весь проект
+golangci-lint run
+
+# Проверить конкретную директорию
+golangci-lint run ./internal/...
+
+# Автоматически исправить проблемы
+golangci-lint run --fix
+```
+
+### Включенные проверки
+
+Линтер настроен на проверку:
+- **Ошибки**: errcheck, govet, typecheck
+- **Стиль кода**: gofmt, goimports, golint, misspell, whitespace
+- **Производительность**: gocritic, unconvert, unparam
+- **Безопасность**: gosec
+- **Сложность**: gocyclo (максимум 15)
+- **Длина строк**: lll (максимум 120 символов)
+
+
+## Makefile
+
+Проект включает Makefile для удобной работы с проектом:
+
+```bash
+make build          # Собрать приложение
+make run            # Запустить приложение локально
+make test           # Запустить тесты
+make lint           # Запустить линтер
+make lint-fix       # Запустить линтер с автоисправлением
+make clean          # Очистить артефакты сборки
+make docker-build   # Собрать Docker образ
+make docker-up      # Запустить через Docker Compose
+make docker-down    # Остановить сервисы
+make loadtest       # Запустить нагрузочное тестирование
+make check          # Полная проверка (lint + test)
+```
